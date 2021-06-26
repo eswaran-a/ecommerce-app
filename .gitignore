@@ -3,3 +3,6 @@
 auth-course.iml
 .settings
 target
+.classpath
+.factorypath
+ecommerce-app.log

@@ -2,9 +2,11 @@ package com.ecommerce.controller;
 
 import com.ecommerce.entity.Cart;
 import com.ecommerce.entity.User;
+import com.ecommerce.exception.InvalidUserDetailsException;
+import com.ecommerce.exception.UserExistsException;
+import com.ecommerce.exception.UserNotFoundException;
 import com.ecommerce.repository.UserRepository;
 import com.ecommerce.request.CreateUserRequest;
-import com.ecommerce.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,41 +32,52 @@ public class UserController {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
-	private UserService userService;
+	private UserRepository userRepository;
+	@Autowired
+	private CartRepository cartRepository;
 
 	@GetMapping("/id/{id}")
 	public ResponseEntity<User> findById(@PathVariable Long id) {
 		log.debug("UserController findById " + id);
 
-		return ResponseEntity.of(userService.findById(id));
+		User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+		return ResponseEntity.ok(user);
 	}
 
 	@GetMapping("/{username}")
 	public ResponseEntity<User> findByUserName(@PathVariable String username) {
 		log.debug("UserController findByUserName " + username);
-		User user = userService.findByUsername(username);
 
-		if(user==null)
-			log.error("UserController findByUserName " + username +". Username not found");
-
-		return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
+		User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+		return ResponseEntity.ok(user);
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
+	public ResponseEntity<User> createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
 
 		if(createUserRequest.getPassword().length()<7 ||
 				!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())){
 			log.error("UserController createUser Password length should be greater than 7 and " +
 					"match the Confirm Password for "+createUserRequest.getUsername());
 
-			return ResponseEntity.badRequest().body("Password length should be greater than 7 and match the Confirm Password");
+			throw new InvalidUserDetailsException();
+		}
+
+		if(userRepository.findByUsername(createUserRequest.getUsername()).isPresent()) {
+			log.debug("UserController createUser user "+ createUserRequest.getUsername() + " exist already!!!");
+			throw new UserExistsException();
 		}
 
 		User user = new User();
 		user.setUsername(createUserRequest.getUsername());
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
-		return ResponseEntity.ok(userService.createUser(user));
+
+		Cart cart = new Cart();
+		user.setCart(cartRepository.save(cart));
+		userRepository.save(user);
+
+		log.debug("UserController createUser user "+ user.getUsername() + " created successfully!!!");
+		return ResponseEntity.ok(user);
 	}
 
 }
