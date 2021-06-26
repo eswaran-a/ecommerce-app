@@ -54,10 +54,10 @@ public class JWTAuthenticationVerficationFilter extends BasicAuthenticationFilte
             if (user != null) {
                 return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
             }
-            log.warn("JWTAuthenticationVerficationFilter getAuthentication unable to get user from token!!!");
+            log.warn("Class=JWTAuthenticationVerficationFilter Method=getAuthentication Message=unable to get user from token!!!");
             return null;
         }
-        log.warn("JWTAuthenticationVerficationFilter getAuthentication unable to get token from header!!!");
+        log.warn("Class=JWTAuthenticationVerficationFilter Method=getAuthentication Message=unable to get token from header!!!");
         return null;
     }
 

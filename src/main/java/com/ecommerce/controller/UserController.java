@@ -38,7 +38,7 @@ public class UserController {
 
 	@GetMapping("/id/{id}")
 	public ResponseEntity<User> findById(@PathVariable Long id) {
-		log.debug("UserController findById " + id);
+		log.debug("Class=UserController Method=findById Message=UserId " + id);
 
 		User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
 		return ResponseEntity.ok(user);
@@ -46,7 +46,7 @@ public class UserController {
 
 	@GetMapping("/{username}")
 	public ResponseEntity<User> findByUserName(@PathVariable String username) {
-		log.debug("UserController findByUserName " + username);
+		log.debug("Class=UserController Method=findByUserName Message=Username " + username);
 
 		User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
 		return ResponseEntity.ok(user);
@@ -57,14 +57,14 @@ public class UserController {
 
 		if(createUserRequest.getPassword().length()<7 ||
 				!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())){
-			log.error("UserController createUser Password length should be greater than 7 and " +
+			log.error("Class=UserController Method=createUser Message=Password length should be greater than 7 and " +
 					"match the Confirm Password for "+createUserRequest.getUsername());
 
 			throw new InvalidUserDetailsException();
 		}
 
 		if(userRepository.findByUsername(createUserRequest.getUsername()).isPresent()) {
-			log.debug("UserController createUser user "+ createUserRequest.getUsername() + " exist already!!!");
+			log.debug("Class=UserController Method=createUser Message=user"+ createUserRequest.getUsername() + " exist already!!!");
 			throw new UserExistsException();
 		}
 
@@ -76,7 +76,7 @@ public class UserController {
 		user.setCart(cartRepository.save(cart));
 		userRepository.save(user);
 
-		log.debug("UserController createUser user "+ user.getUsername() + " created successfully!!!");
+		log.debug("Class=UserController Method=createUser Message=user "+ user.getUsername() + " created successfully!!!");
 		return ResponseEntity.ok(user);
 	}
 

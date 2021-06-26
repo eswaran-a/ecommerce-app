@@ -25,25 +25,25 @@ public class ItemController {
 	
 	@GetMapping
 	public ResponseEntity<List<Item>> getItems() {
-		log.debug("ItemController getItems");
+		log.debug("Class=ItemController Method= getItems");
 
 		return ResponseEntity.ok(itemRepository.findAll());
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Item> getItemById(@PathVariable Long id) {
-		log.debug("ItemController getItemById "+ id);
+		log.debug("Class=ItemController Method=getItemById Message=ItemId "+ id);
 		Item item = itemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
 		return ResponseEntity.ok(item);
 	}
 	
 	@GetMapping("/name/{name}")
 	public ResponseEntity<List<Item>> getItemsByName(@PathVariable String name) {
-		log.debug("ItemController getItemsByName "+ name);
+		log.debug("Class=ItemController Method=getItemsByName Message=ItemName "+ name);
 
 		List<Item> items = itemRepository.findByName(name);
 		if(items == null || items.isEmpty()){
-			log.error("ItemController getItemsByName "+ name+ " not found!!!");
+			log.error("Class=ItemController Method=getItemsByName Message="+ name+ " not found!!!");
 			throw new ItemNotFoundException();
 		}
 

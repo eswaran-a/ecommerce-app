@@ -27,11 +27,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByUsername(username).get();
 
         if (user == null) {
-            log.error("UserDetailsServiceImpl loadUserByUsername username "+username+" not found!!");
+            log.error("Class=UserDetailsServiceImpl Method=loadUserByUsername Message=username "+username+" not found!!");
             throw new UsernameNotFoundException(username);
         }
 
-        log.debug("UserDetailsServiceImpl loadUserByUsername username "+username+" found!!");
+        log.debug("Class=UserDetailsServiceImpl Method=loadUserByUsername Message=username "+username+" found!!");
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(),
                 Collections.emptyList());

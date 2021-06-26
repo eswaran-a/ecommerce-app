@@ -42,7 +42,7 @@ public class CartController {
 		Cart cart = user.getCart();
 		IntStream.range(0, request.getQuantity()).forEach(i -> cart.addItem(item));
 		cartRepository.save(cart);
-		log.debug("CartController addTocart Item "+ request.getItemId()+ " added to cart successfully for user "+ request.getUsername());
+		log.debug("Class=CartController Method=addTocart Message=Item "+ request.getItemId()+ " added to cart successfully for user "+ request.getUsername());
 		return ResponseEntity.ok(cart);
 	}
 	
@@ -54,7 +54,7 @@ public class CartController {
 		Cart cart = user.getCart();
 		IntStream.range(0, request.getQuantity()).forEach(i -> cart.removeItem(item));
 		cartRepository.save(cart);
-		log.debug("CartController removeFromcart Item "+ request.getItemId()+ " removed from cart successfully for user "+ request.getUsername());
+		log.debug("Class=CartController Method=removeFromcart Message=Item "+ request.getItemId()+ " removed from cart successfully for user "+ request.getUsername());
 		return ResponseEntity.ok(cart);
 	}
 }

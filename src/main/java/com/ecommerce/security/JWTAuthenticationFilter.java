@@ -61,6 +61,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .sign(HMAC512(SecurityConstants.SECRET.getBytes()));
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
 
-        log.debug("JWTAuthenticationFilter successfulAuthentication token created successfully!!!");
+        log.debug("Class=JWTAuthenticationFilter Method=successfulAuthentication Message=token created successfully!!!");
     }
 }

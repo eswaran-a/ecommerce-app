@@ -30,20 +30,21 @@ public class OrderController {
 
 	@PostMapping("/submit/{username}")
 	public ResponseEntity<UserOrder> submit(@PathVariable String username) {
-		log.debug("OrderController submitOrder invoked with username " + username);
+		log.debug("Class=OrderController Method=submitOrder Message=invoked with username " + username);
 
 		User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
 
 		UserOrder order = UserOrder.createFromCart(user.getCart());
 		orderRepository.save(order);
 
-		log.debug("OrderController submitOrder saved for username " + username);
+		log.debug("Class=OrderController Method=submitOrder Message=saved for username " + username);
 		return ResponseEntity.ok(order);
 	}
 	
 	@GetMapping("/history/{username}")
 	public ResponseEntity<List<UserOrder>> getOrdersForUser(@PathVariable String username) {
 		User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+		log.debug("Class=OrderController Method=getOrdersForUser Message=invoked for username " + username);
 		return ResponseEntity.ok(orderRepository.findByUser(user));
 	}
 }

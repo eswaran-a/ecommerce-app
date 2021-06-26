@@ -32,7 +32,7 @@ public class ECommerceApplication {
 
 	@Bean
 	CommandLineRunner initDatabase(ItemRepository repository) {
-		log.info("ECommerceApplication Item database initialized");
+		log.info("Class=ECommerceApplication Method=initDatabase Message=Item database initialized");
 		return args -> {
 			repository.save(new Item("Round Widget", new BigDecimal(2.99), "A widget that is round"));
 			repository.save(new Item("Square Widget", new BigDecimal(1.99), "A widget that is square"));
